@@ -1,7 +1,0 @@
-Monday:     anything
-Tuesday:    anything
-Wednesday:  anything
-Thursday:   anything
-Friday:     anything
-Saturday:   anything
-Sunday:     anything
