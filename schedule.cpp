@@ -3,7 +3,7 @@
 
 int main() {
   std::string request;
-  const std::string days[7] = {"Monday", "Tuesday",  "Wednesday", "Thursday",
+  const std::array<string, 7> days = {"Monday", "Tuesday",  "Wednesday", "Thursday",
                                "Friday", "Saturday", "Sunday"};
 
   std::ifstream input;
@@ -18,4 +18,6 @@ int main() {
 
   while (input) {
   }
+  
+  return 0;
 }
