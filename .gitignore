@@ -44,7 +44,11 @@ Thumbs.db
 
 # Prisma artifacts
 prisma/generated/
+prisma/.env
 
 # Local Postgres (manual init)
 .pgdata/
 .pglog
+
+# TypeScript build metadata
+*.tsbuildinfo
