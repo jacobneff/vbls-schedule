@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ShiftType {
+  REG
+  REL
+  AS
+  FM
+  MR_AS
+  OFF
+}
+
+enum Role {
+  GUARD
+  SUPERVISOR
+  ADMIN
+}
+
+enum Zone {
+  CROATAN
+  RESORT_SOUTH
+  RESORT_MIDDLE
+  RESORT_NORTH
+  FIFTY_SEVENTH
+}
+
+enum AssignStatus {
+  SCHEDULED
+  CHECKED_IN
+  LATE
+  NO_SHOW
+  CANCELLED
+  SWAPPED
+}
+
+model User {
+  id                       Int                   @id @default(autoincrement())
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+  role                     Role
+  firstName                String
+  lastName                 String
+  phone                    String?
+  email                    String                @unique
+  yearsAtVBLS              Int
+  isRookie                 Boolean               @default(false)
+  alwaysOff                String[]
+  guardPrefs               Json?
+  assignments              Assignment[]
+  availabilities           Availability[]
+  availabilityChanges      AvailabilityChange[]  @relation("AvailabilityOwner")
+  availabilityChangeEvents AvailabilityChange[]  @relation("AvailabilityActor")
+  tradesCreated            Trade[]               @relation("TradeCreatedBy")
+  tradesDecided            Trade[]               @relation("TradeDecidedBy")
+}
+
+model Stand {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  label       String   @unique
+  zone        Zone
+  supportsAS  Boolean  @default(false)
+  assignments Assignment[]
+}
+
+model DailyPlan {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  date               DateTime  @unique
+  asPattern          String
+  overscheduleTarget Int       @default(0)
+  hotspotFlags       Json?
+  assignments        Assignment[]
+}
+
+model Assignment {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  date           DateTime
+  shift          ShiftType
+  status         AssignStatus @default(SCHEDULED)
+  isExtra        Boolean      @default(false)
+  notes          String?
+  checkinLat     Float?
+  checkinLng     Float?
+  checkinMethod  String?
+  userId         Int
+  standId        Int?
+  dailyPlanId    Int?
+  user           User         @relation(fields: [userId], references: [id])
+  stand          Stand?       @relation(fields: [standId], references: [id])
+  dailyPlan      DailyPlan?   @relation(fields: [dailyPlanId], references: [id])
+  swapsAsSource  Trade[]      @relation("AssignmentFrom")
+  swapsAsTarget  Trade[]      @relation("AssignmentTo")
+
+  @@index([date, shift])
+  @@unique([date, userId, shift], name: "assignment_unique_shift_per_guard")
+}
+
+model Availability {
+  id        Int                   @id @default(autoincrement())
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+  date      DateTime
+  request   ShiftType?
+  source    AvailabilitySource
+  notes     String?
+  userId    Int
+  user      User                  @relation(fields: [userId], references: [id])
+  changes   AvailabilityChange[]  @relation("AvailabilityRecord")
+
+  @@unique([userId, date])
+  @@index([date])
+}
+
+enum AvailabilitySource {
+  IN_APP
+  PASTE
+  ADMIN_EDIT
+}
+
+model AvailabilityChange {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  userId         Int
+  availabilityId Int
+  diff           Json
+  actorId        Int?
+  user           User         @relation("AvailabilityOwner", fields: [userId], references: [id])
+  availability   Availability @relation("AvailabilityRecord", fields: [availabilityId], references: [id])
+  actor          User?        @relation("AvailabilityActor", fields: [actorId], references: [id])
+}
+
+model Trade {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  status       TradeStatus
+  reason       String?
+  fromAssignId Int
+  toAssignId   Int
+  createdById  Int
+  decidedById  Int?
+  from         Assignment @relation("AssignmentFrom", fields: [fromAssignId], references: [id])
+  to           Assignment @relation("AssignmentTo", fields: [toAssignId], references: [id])
+  createdBy    User       @relation("TradeCreatedBy", fields: [createdById], references: [id])
+  decidedBy    User?      @relation("TradeDecidedBy", fields: [decidedById], references: [id])
+}
+
+enum TradeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}

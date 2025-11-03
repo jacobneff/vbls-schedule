@@ -21,6 +21,11 @@
 - **Comments:** Only add code comments when they clarify complex logic or domain nuances.
 - **Docs:** Update `README.md` (progress tracker) and any relevant specs when scope shifts or new constraints emerge.
 
+## Repo Structure (initial)
+- Root `package.json` uses npm workspaces; primary web app lives in `apps/web`.
+- Prisma schema and seeds live under `/prisma`; database defaults to Postgres (see `docker-compose.yml`).
+- Shared developer config: `.env.example`, `.prettierrc.json`, `.gitignore`.
+
 ## Domain Highlights
 - **Zones & Stands:** Croatan, Resort (South/Middle/North), 57th Street; some stands disallow AS shifts.
 - **Shift Types:** `REG`, `REL`, `AS`, `FM`, `MR_AS`, `OFF` with specific muster/start times and constraints.

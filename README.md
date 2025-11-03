@@ -5,13 +5,15 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 
 ## Implementation Progress
 - ✅ Repository initialized with project documentation (`README.md`, `AGENTS.MD`).
-- ⬜️ Codebase, tooling, and project scaffolding still to be created (Next.js app, Prisma schema, testing harness, etc.).
-- ⬜️ No environments or integrations configured yet (Supabase/Neon, Pusher, Sentry).
+- ✅ Next.js App Router project scaffolded under `apps/web` with Tailwind, ESLint, Prettier, Vitest, and initial landing UI.
+- ✅ Prisma schema drafted with VBLS domain models plus Postgres & seed scaffolding (`prisma/schema.prisma`, `docker-compose.yml`, `.env.example`).
+- ⬜️ Runtime dependencies still need to be installed locally (`npm install`) and migrations generated.
+- ⬜️ External services (Supabase/Neon, Pusher, Sentry) not yet configured.
 
 ## Roadmap Snapshot
 | Milestone | Scope Highlights | Status |
 |-----------|-----------------|--------|
-| **M0 – Data & Admin** | Auth, seniority import, stands/zones CRUD UI, admin rule toggles. | Not started |
+| **M0 – Data & Admin** | Auth, seniority import, stands/zones CRUD UI, admin rule toggles. | In progress (schema + tooling scaffolded) |
 | **M1 – Availability & Parser** | Guard availability submission, legacy text parser, guard schedule view. | Not started |
 | **M2 – Scheduler v1** | Weekly auto-scheduler with hard constraints, REL ratios, AS pattern, MR-AS cap, Excel/PDF export. | Not started |
 | **M3 – Muster** | QR + geofence check-in, supervisor drag-drop board, extras/no-shows handling. | Not started |
@@ -19,10 +21,28 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 | **M5 – Hotspot Bias** | Admin hotspot controls, scheduling biasing, analytics. | Not started |
 
 ## Immediate Next Steps
-1. Establish monorepo or single-app structure (e.g., Next.js with Turborepo or standalone) and configure base tooling (TypeScript, ESLint, Prettier, Tailwind, testing framework).
-2. Define initial Prisma schema aligned with the domain model (Users, Stands, DailyPlan, Assignment, Availability, Trade).
-3. Stand up database connection layer (local Postgres + Supabase-ready config) and seed scripts for sample data/seniority import.
+1. Install dependencies (`npm install`) and validate TypeScript, lint, and test scripts once Node tooling is available.
+2. Implement Prisma migrations plus seed data to stand up sample stands/zones, seniority roster, and baseline admin user.
+3. Build authentication + role guard scaffolding (Supabase Auth or Clerk) and wire a protected admin console shell.
 4. Implement basic admin UI to manage stands/zones and seniority lists (Milestone M0 foundation).
+
+## Workspace Layout
+- `apps/web` — Next.js App Router frontend + API routes, Tailwind, Vitest setup.
+- `prisma` — Prisma schema and future seed scripts for VBLS domain.
+- `.env.example` — Local environment template; copy to `.env` and adjust secrets.
+- `docker-compose.yml` — Local Postgres instance (`postgres:15-alpine`) for development.
+
+## Local Development (once Node toolchain is installed)
+1. `cp .env.example .env`
+2. `docker compose up -d` (start Postgres)
+3. `npm install`
+4. `npm run prisma:push --workspace web` (or `npm run prisma:migrate --workspace web` once migrations exist)
+5. `npm run db:seed --workspace web`
+6. `npm run dev`
+
+Supporting scripts: `npm run lint --workspace web`, `npm run test --workspace web`, `npm run typecheck --workspace web`.
+
+> Sandbox note: if Docker or local Postgres cannot open sockets in your environment, point `DATABASE_URL` at an external Postgres instance (host machine, Supabase, etc.) before running Prisma commands.
 
 ## Backlog & Open Questions
 - Deployment target confirmation: Vercel + Supabase vs. single Fly.io deployment?
@@ -33,3 +53,4 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 
 ## Change Log
 - **2025-11-03:** Kick-off documentation created; mission, architecture, and milestone plan captured.
+- **2025-11-03:** Added Next.js scaffold, tooling, Prisma schema, and local Postgres/docker templates.
