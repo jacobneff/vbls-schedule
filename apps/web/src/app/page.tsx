@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import type { Route } from 'next';
 
-const quickLinks = [
+const quickLinks: Array<{ href: string; label: string }> = [
   { href: '/admin', label: 'Admin Console (coming soon)' },
   { href: '/muster', label: 'Daily Muster' },
   { href: '/scheduler', label: 'Weekly Scheduler' }
@@ -29,7 +30,7 @@ export default function Home() {
           {quickLinks.map(({ href, label }) => (
             <Link
               key={href}
-              href={href}
+              href={href as Route}
               className="rounded-lg border border-slate-700 bg-slate-900/60 p-4 transition hover:border-cyan-400 hover:bg-slate-900"
             >
               <p className="text-sm font-medium text-cyan-300">Preview</p>

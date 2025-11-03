@@ -78,6 +78,10 @@ export function CreateStandForm({ zoneOptions }: CreateStandFormProps) {
         />
         Supports Afternoon Shift (AS)
       </label>
+      <p className="text-xs text-slate-500">
+        Cro stands (Cro 1-6) along with stands 56 and 57 are locked to no afternoon shift. The
+        system ignores the toggle above for those stands.
+      </p>
 
       {state.error && <p className="text-sm text-rose-400">{state.error}</p>}
       {state.success && !state.error && (

@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
@@ -40,84 +40,94 @@ enum AssignStatus {
   SWAPPED
 }
 
+enum DayPresetType {
+  WEEKDAY
+  WEEKEND
+  MEMORIAL_DAY
+  INDEPENDENCE_DAY
+  LABOR_DAY
+}
+
 model User {
-  id                       Int                   @id @default(autoincrement())
-  createdAt                DateTime              @default(now())
-  updatedAt                DateTime              @updatedAt
+  id                       Int                  @id @default(autoincrement())
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
   role                     Role
   firstName                String
   lastName                 String
   phone                    String?
-  email                    String                @unique
+  email                    String               @unique
   yearsAtVBLS              Int
-  isRookie                 Boolean               @default(false)
+  isRookie                 Boolean              @default(false)
   alwaysOff                String[]
   guardPrefs               Json?
   assignments              Assignment[]
   availabilities           Availability[]
-  availabilityChanges      AvailabilityChange[]  @relation("AvailabilityOwner")
-  availabilityChangeEvents AvailabilityChange[]  @relation("AvailabilityActor")
-  tradesCreated            Trade[]               @relation("TradeCreatedBy")
-  tradesDecided            Trade[]               @relation("TradeDecidedBy")
+  availabilityChanges      AvailabilityChange[] @relation("AvailabilityOwner")
+  availabilityChangeEvents AvailabilityChange[] @relation("AvailabilityActor")
+  tradesCreated            Trade[]              @relation("TradeCreatedBy")
+  tradesDecided            Trade[]              @relation("TradeDecidedBy")
 }
 
 model Stand {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  label       String   @unique
-  zone        Zone
-  supportsAS  Boolean  @default(false)
-  assignments Assignment[]
+  id                   Int                    @id @default(autoincrement())
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  label                String                 @unique
+  zone                 Zone
+  supportsAS           Boolean                @default(false)
+  neverSupportsAS      Boolean                @default(false)
+  assignments          Assignment[]
+  AfternoonPresetEntry AfternoonPresetEntry[]
 }
 
 model DailyPlan {
-  id                 Int       @id @default(autoincrement())
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  date               DateTime  @unique
+  id                 Int          @id @default(autoincrement())
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  date               DateTime     @unique
   asPattern          String
-  overscheduleTarget Int       @default(0)
+  overscheduleTarget Int          @default(0)
   hotspotFlags       Json?
   assignments        Assignment[]
 }
 
 model Assignment {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  date           DateTime
-  shift          ShiftType
-  status         AssignStatus @default(SCHEDULED)
-  isExtra        Boolean      @default(false)
-  notes          String?
-  checkinLat     Float?
-  checkinLng     Float?
-  checkinMethod  String?
-  userId         Int
-  standId        Int?
-  dailyPlanId    Int?
-  user           User         @relation(fields: [userId], references: [id])
-  stand          Stand?       @relation(fields: [standId], references: [id])
-  dailyPlan      DailyPlan?   @relation(fields: [dailyPlanId], references: [id])
-  swapsAsSource  Trade[]      @relation("AssignmentFrom")
-  swapsAsTarget  Trade[]      @relation("AssignmentTo")
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  date          DateTime
+  shift         ShiftType
+  status        AssignStatus @default(SCHEDULED)
+  isExtra       Boolean      @default(false)
+  notes         String?
+  checkinLat    Float?
+  checkinLng    Float?
+  checkinMethod String?
+  userId        Int
+  standId       Int?
+  dailyPlanId   Int?
+  user          User         @relation(fields: [userId], references: [id])
+  stand         Stand?       @relation(fields: [standId], references: [id])
+  dailyPlan     DailyPlan?   @relation(fields: [dailyPlanId], references: [id])
+  swapsAsSource Trade[]      @relation("AssignmentFrom")
+  swapsAsTarget Trade[]      @relation("AssignmentTo")
 
-  @@index([date, shift])
   @@unique([date, userId, shift], name: "assignment_unique_shift_per_guard")
+  @@index([date, shift])
 }
 
 model Availability {
-  id        Int                   @id @default(autoincrement())
-  createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
+  id        Int                  @id @default(autoincrement())
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
   date      DateTime
   request   ShiftType?
   source    AvailabilitySource
   notes     String?
   userId    Int
-  user      User                  @relation(fields: [userId], references: [id])
-  changes   AvailabilityChange[]  @relation("AvailabilityRecord")
+  user      User                 @relation(fields: [userId], references: [id])
+  changes   AvailabilityChange[] @relation("AvailabilityRecord")
 
   @@unique([userId, date])
   @@index([date])
@@ -142,19 +152,19 @@ model AvailabilityChange {
 }
 
 model Trade {
-  id           Int       @id @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
   status       TradeStatus
   reason       String?
   fromAssignId Int
   toAssignId   Int
   createdById  Int
   decidedById  Int?
-  from         Assignment @relation("AssignmentFrom", fields: [fromAssignId], references: [id])
-  to           Assignment @relation("AssignmentTo", fields: [toAssignId], references: [id])
-  createdBy    User       @relation("TradeCreatedBy", fields: [createdById], references: [id])
-  decidedBy    User?      @relation("TradeDecidedBy", fields: [decidedById], references: [id])
+  from         Assignment  @relation("AssignmentFrom", fields: [fromAssignId], references: [id])
+  to           Assignment  @relation("AssignmentTo", fields: [toAssignId], references: [id])
+  createdBy    User        @relation("TradeCreatedBy", fields: [createdById], references: [id])
+  decidedBy    User?       @relation("TradeDecidedBy", fields: [decidedById], references: [id])
 }
 
 enum TradeStatus {
@@ -162,4 +172,25 @@ enum TradeStatus {
   APPROVED
   REJECTED
   CANCELLED
+}
+
+model AfternoonPreset {
+  id         Int                    @id @default(autoincrement())
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
+  presetType DayPresetType          @unique
+  entries    AfternoonPresetEntry[]
+}
+
+model AfternoonPresetEntry {
+  id        Int             @id @default(autoincrement())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  enabled   Boolean         @default(true)
+  standId   Int
+  presetId  Int
+  stand     Stand           @relation(fields: [standId], references: [id])
+  preset    AfternoonPreset @relation(fields: [presetId], references: [id])
+
+  @@unique([standId, presetId], name: "stand_preset_unique")
 }

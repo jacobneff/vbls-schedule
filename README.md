@@ -8,7 +8,9 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 - ✅ Next.js App Router project scaffolded under `apps/web` with Tailwind, ESLint, Prettier, Vitest, and initial landing UI.
 - ✅ Prisma schema drafted with VBLS domain models plus Postgres & seed scaffolding (`prisma/schema.prisma`, `docker-compose.yml`, `.env.example`).
 - ✅ Admin console now lists stands from Prisma and supports creating new stands via server actions/API (`/admin`).
-- ⬜️ Runtime dependencies still need to be installed locally (`npm install`) and migrations generated.
+- ✅ Runtime dependencies installed, initial migration applied, and baseline seed verified against local Postgres.
+- ✅ Full stand roster (Cro 1-6, 2-42, 56-57) seeded with afternoon-lock rules, weekday/weekend/holiday presets, and admin toggles for afternoon coverage.
+- ✅ Frontend upgraded to Next.js 16.0.1 with ESLint 9 and TypeScript 5.7 alignment.
 - ⬜️ External services (Supabase/Neon, Pusher, Sentry) not yet configured.
 
 ## Roadmap Snapshot
@@ -22,10 +24,9 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 | **M5 – Hotspot Bias** | Admin hotspot controls, scheduling biasing, analytics. | Not started |
 
 ## Immediate Next Steps
-1. Ensure dependencies are installed (`npm install`), then rerun `npm run typecheck --workspace web` and `npm run test --workspace web`.
-2. Implement Prisma migrations plus seed data to stand up sample stands/zones, seniority roster, and baseline admin user.
-3. Build authentication + role guard scaffolding (Supabase Auth or Clerk) and wire a protected admin console shell.
-4. Extend admin tooling for seniority management and rule toggles (completing M0 scope).
+1. Build authentication + role guard scaffolding (Supabase Auth or Clerk) and wire a protected admin console shell.
+2. Extend admin tooling for seniority management, default rule presets, and day-specific overrides (completing M0 scope).
+3. Stand up availability intake and parser groundwork to unblock M1.
 
 ## Workspace Layout
 - `apps/web` — Next.js App Router frontend + API routes, Tailwind, Vitest setup.
@@ -56,3 +57,6 @@ Supporting scripts: `npm run lint --workspace web`, `npm run test --workspace we
 - **2025-11-03:** Kick-off documentation created; mission, architecture, and milestone plan captured.
 - **2025-11-03:** Added Next.js scaffold, tooling, Prisma schema, and local Postgres/docker templates.
 - **2025-11-03:** Implemented stand management server action, API endpoint, and admin UI listing.
+- **2025-11-03:** Applied initial Prisma migration, ran seed script for baseline data, and verified typecheck/test workflows.
+- **2025-11-03:** Expanded stand roster with afternoon-lock rules, added weekday/weekend/holiday presets, and updated admin UI for afternoon management.
+- **2025-11-03:** Upgraded to Next.js 16 with updated lint/type tooling to keep the frontend current.
