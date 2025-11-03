@@ -76,6 +76,7 @@ model Stand {
   label                String                 @unique
   zone                 Zone
   supportsAS           Boolean                @default(false)
+  doubleStaffed        Boolean                @default(false)
   neverSupportsAS      Boolean                @default(false)
   assignments          Assignment[]
   AfternoonPresetEntry AfternoonPresetEntry[]

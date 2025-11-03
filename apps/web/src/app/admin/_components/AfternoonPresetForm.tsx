@@ -1,7 +1,9 @@
 'use client';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 
-import { initialStandFormState, updateAfternoonPresetAction } from '@/server/actions/stand';
+import { updateAfternoonPresetAction } from '@/server/actions/stand';
+import { initialStandFormState } from '@/server/actions/stand-state';
 
 type PresetEntry = {
   standId: number;
@@ -37,7 +39,7 @@ export function AfternoonPresetForm({
   description,
   entries
 }: AfternoonPresetFormProps) {
-  const [state, action] = useFormState(updateAfternoonPresetAction, initialStandFormState);
+  const [state, action] = useActionState(updateAfternoonPresetAction, initialStandFormState);
 
   return (
     <form

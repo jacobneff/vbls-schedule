@@ -7,9 +7,10 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 - ✅ Repository initialized with project documentation (`README.md`, `AGENTS.MD`).
 - ✅ Next.js App Router project scaffolded under `apps/web` with Tailwind, ESLint, Prettier, Vitest, and initial landing UI.
 - ✅ Prisma schema drafted with VBLS domain models plus Postgres & seed scaffolding (`prisma/schema.prisma`, `docker-compose.yml`, `.env.example`).
-- ✅ Admin console now lists stands from Prisma and supports creating new stands via server actions/API (`/admin`).
+- ✅ Admin console lists stands from Prisma with afternoon and double-staff toggles for supervisors/Admins (`/admin`).
 - ✅ Runtime dependencies installed, initial migration applied, and baseline seed verified against local Postgres.
 - ✅ Full stand roster (Cro 1-6, 2-42, 56-57) seeded with afternoon-lock rules, weekday/weekend/holiday presets, and admin toggles for afternoon coverage.
+- ✅ Clerk authentication integrated with Prisma user provisioning, admin RBAC, and webhook sync.
 - ✅ Frontend upgraded to Next.js 16.0.1 with ESLint 9 and TypeScript 5.7 alignment.
 - ⬜️ External services (Supabase/Neon, Pusher, Sentry) not yet configured.
 
@@ -24,7 +25,7 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 | **M5 – Hotspot Bias** | Admin hotspot controls, scheduling biasing, analytics. | Not started |
 
 ## Immediate Next Steps
-1. Build authentication + role guard scaffolding (Supabase Auth or Clerk) and wire a protected admin console shell.
+1. Backfill Clerk metadata (role, years, rookie flag) for existing guards and document the provisioning workflow.
 2. Extend admin tooling for seniority management, default rule presets, and day-specific overrides (completing M0 scope).
 3. Stand up availability intake and parser groundwork to unblock M1.
 
@@ -60,3 +61,5 @@ Supporting scripts: `npm run lint --workspace web`, `npm run test --workspace we
 - **2025-11-03:** Applied initial Prisma migration, ran seed script for baseline data, and verified typecheck/test workflows.
 - **2025-11-03:** Expanded stand roster with afternoon-lock rules, added weekday/weekend/holiday presets, and updated admin UI for afternoon management.
 - **2025-11-03:** Upgraded to Next.js 16 with updated lint/type tooling to keep the frontend current.
+- **2025-11-03:** Introduced session-based auth scaffolding, protected the admin console, and added double-staffing controls.
+- **2025-11-03:** Connected Clerk for authentication, added webhook-driven user sync, and wired admin roles to metadata.

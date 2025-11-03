@@ -15,6 +15,7 @@ type StandSeed = {
   label: string;
   zone: Zone;
   supportsAS: boolean;
+  doubleStaffed: boolean;
   neverSupportsAS: boolean;
 };
 
@@ -25,6 +26,7 @@ function createStandRange(start: number, end: number, zone: Zone): StandSeed[] {
       label,
       zone,
       supportsAS: true,
+      doubleStaffed: false,
       neverSupportsAS: false
     };
   });
@@ -35,13 +37,26 @@ const stands: StandSeed[] = [
     label: `Cro ${index + 1}`,
     zone: Zone.CROATAN,
     supportsAS: false,
+    doubleStaffed: false,
     neverSupportsAS: true
   })),
   ...createStandRange(2, 14, Zone.RESORT_SOUTH),
   ...createStandRange(15, 28, Zone.RESORT_MIDDLE),
   ...createStandRange(29, 42, Zone.RESORT_NORTH),
-  { label: '56', zone: Zone.FIFTY_SEVENTH, supportsAS: false, neverSupportsAS: true },
-  { label: '57', zone: Zone.FIFTY_SEVENTH, supportsAS: false, neverSupportsAS: true }
+  {
+    label: '56',
+    zone: Zone.FIFTY_SEVENTH,
+    supportsAS: false,
+    doubleStaffed: false,
+    neverSupportsAS: true
+  },
+  {
+    label: '57',
+    zone: Zone.FIFTY_SEVENTH,
+    supportsAS: false,
+    doubleStaffed: false,
+    neverSupportsAS: true
+  }
 ];
 
 const presetTypes: DayPresetType[] = [
@@ -133,12 +148,14 @@ async function seedStands() {
       update: {
         zone: stand.zone,
         supportsAS: stand.supportsAS && !stand.neverSupportsAS,
+        doubleStaffed: stand.doubleStaffed,
         neverSupportsAS: stand.neverSupportsAS
       },
       create: {
         label: stand.label,
         zone: stand.zone,
         supportsAS: stand.supportsAS && !stand.neverSupportsAS,
+        doubleStaffed: stand.doubleStaffed,
         neverSupportsAS: stand.neverSupportsAS
       }
     });
