@@ -7,13 +7,14 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 - ✅ Repository initialized with project documentation (`README.md`, `AGENTS.MD`).
 - ✅ Next.js App Router project scaffolded under `apps/web` with Tailwind, ESLint, Prettier, Vitest, and initial landing UI.
 - ✅ Prisma schema drafted with VBLS domain models plus Postgres & seed scaffolding (`prisma/schema.prisma`, `docker-compose.yml`, `.env.example`).
+- ✅ Admin console now lists stands from Prisma and supports creating new stands via server actions/API (`/admin`).
 - ⬜️ Runtime dependencies still need to be installed locally (`npm install`) and migrations generated.
 - ⬜️ External services (Supabase/Neon, Pusher, Sentry) not yet configured.
 
 ## Roadmap Snapshot
 | Milestone | Scope Highlights | Status |
 |-----------|-----------------|--------|
-| **M0 – Data & Admin** | Auth, seniority import, stands/zones CRUD UI, admin rule toggles. | In progress (schema + tooling scaffolded) |
+| **M0 – Data & Admin** | Auth, seniority import, stands/zones CRUD UI, admin rule toggles. | In progress (schema + stands CRUD) |
 | **M1 – Availability & Parser** | Guard availability submission, legacy text parser, guard schedule view. | Not started |
 | **M2 – Scheduler v1** | Weekly auto-scheduler with hard constraints, REL ratios, AS pattern, MR-AS cap, Excel/PDF export. | Not started |
 | **M3 – Muster** | QR + geofence check-in, supervisor drag-drop board, extras/no-shows handling. | Not started |
@@ -21,10 +22,10 @@ The goal is to deliver an end-to-end scheduling and day-of operations platform f
 | **M5 – Hotspot Bias** | Admin hotspot controls, scheduling biasing, analytics. | Not started |
 
 ## Immediate Next Steps
-1. Install dependencies (`npm install`) and validate TypeScript, lint, and test scripts once Node tooling is available.
+1. Ensure dependencies are installed (`npm install`), then rerun `npm run typecheck --workspace web` and `npm run test --workspace web`.
 2. Implement Prisma migrations plus seed data to stand up sample stands/zones, seniority roster, and baseline admin user.
 3. Build authentication + role guard scaffolding (Supabase Auth or Clerk) and wire a protected admin console shell.
-4. Implement basic admin UI to manage stands/zones and seniority lists (Milestone M0 foundation).
+4. Extend admin tooling for seniority management and rule toggles (completing M0 scope).
 
 ## Workspace Layout
 - `apps/web` — Next.js App Router frontend + API routes, Tailwind, Vitest setup.
@@ -54,3 +55,4 @@ Supporting scripts: `npm run lint --workspace web`, `npm run test --workspace we
 ## Change Log
 - **2025-11-03:** Kick-off documentation created; mission, architecture, and milestone plan captured.
 - **2025-11-03:** Added Next.js scaffold, tooling, Prisma schema, and local Postgres/docker templates.
+- **2025-11-03:** Implemented stand management server action, API endpoint, and admin UI listing.

@@ -25,6 +25,7 @@
 - Root `package.json` uses npm workspaces; primary web app lives in `apps/web`.
 - Prisma schema and seeds live under `/prisma`; database defaults to Postgres (see `docker-compose.yml`).
 - Shared developer config: `.env.example`, `.prettierrc.json`, `.gitignore`.
+- `/apps/web/src/app/admin` currently surfaces stand CRUD: Prisma-backed list + create form via server actions to accelerate M0 progress.
 
 ## Domain Highlights
 - **Zones & Stands:** Croatan, Resort (South/Middle/North), 57th Street; some stands disallow AS shifts.
