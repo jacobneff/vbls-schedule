@@ -45,3 +45,6 @@ Thumbs.db
 # Prisma artifacts
 prisma/generated/
 
+# Local Postgres (manual init)
+.pgdata/
+.pglog
